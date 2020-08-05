@@ -60,6 +60,16 @@ const addFriend = (id_user, code_user) => dispatch => {
     })
 }
 
+const updateRooms = (data) => dispatch => {
+    dispatch(useRoom(data));
+    // dispatch(setFetching(true));
+}
+
+const updateFriend = (data) => dispatch => {
+    dispatch(useUpdateFriend(data));
+    dispatch(setFetching(true));
+}
+
 const useRoom = (data) => {
     return {
         type: 'SET_ROOM',
@@ -84,10 +94,20 @@ const useReadChat = (id_room, status) => {
     }
 }
 
+const useUpdateFriend = (data) => {
+    return {
+        type: 'UPDATE_FRIEND',
+        payload: data
+    }
+}
+
+
 export {
     setRoom,
     setFetching,
     setReadChat,
     addRoom,
     addFriend,
+    updateRooms,
+    updateFriend
 }

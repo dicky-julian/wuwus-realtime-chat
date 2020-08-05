@@ -18,9 +18,9 @@ const style = StyleSheet.create({
         color: color.light
     },
     container: {
-        minHeight: Dimensions.get('window').height- 155,
+        height: Dimensions.get('window').height- 155,
         backgroundColor: color.light,
-        paddingTop: 10,
+        paddingTop: 10
     },
     inputContainer: {
         height: 65,
@@ -28,9 +28,8 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: Dimensions.get('window').width,
-        bottom: 0,
         left: 0,
-        backgroundColor: color.light
+        backgroundColor: color.light,
     },
     modalInput: {
         flexDirection: 'row',

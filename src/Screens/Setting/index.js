@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Image, ImageBackground, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
-import io from 'socket.io-client';
 import { Maps, Topbar } from '../../Components';
 import style from './style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -93,9 +92,6 @@ class Setting extends Component {
             const userId = this.props.auth.isLogin.id;
             this.props.setUserProfile(userId);
         }
-        this.socket = io(baseUrl);
-        this.socket.emit('yuhuu', {data: 'hi from Librarian'});
-        // this.socket = io(baseUrl);
     }
 
     componentDidUpdate() {
@@ -116,10 +112,6 @@ class Setting extends Component {
             this.props.setFetching(false);
             this.setmodalImageVisible(false);
         }
-    }
-
-    componentWillUnmount() {
-        this.socket.disconnect();
     }
 
     render() {

@@ -31,13 +31,11 @@ const addFriendRoom = async (id_user, code_user) => {
 
     const res = await fetch(options)
         .then(res => {
-            console.log(res)
             return {
                 data: res.data.data
             }
         })
         .catch((err) => {
-            console.log(err)
             if (err.response.status === 402) {
                 return {
                     status: 'Duplicate'

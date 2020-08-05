@@ -7,7 +7,7 @@ class Realtime extends Component {
     componentDidMount() {
         this.socket = io(baseUrl);
         this.socket.on('updateImage', res => {
-            console.log(res);
+            // console.log(res);
         })
     }
 

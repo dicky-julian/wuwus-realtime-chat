@@ -36,7 +36,11 @@ const room = (state = initialState, action) => {
                 ...state,
                 room: room
             }
-
+        case 'UPDATE_FRIEND':
+            return {
+                ...state,
+                friend: action.payload
+            }
         case 'REMOVE_ROOM':
             return {
                 room: '',

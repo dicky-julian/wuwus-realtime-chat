@@ -41,13 +41,11 @@ const updateImageProfile = async (id, data) => {
 
     const res = await fetch(options)
         .then(res => {
-            console.log(res)
             return {
                 data: res.data.data
             }
         })
         .catch((err) => {
-            console.log(err.response)
             return false
         });
     return res;

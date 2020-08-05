@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { AppState, Image, PermissionsAndroid, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
+import io from 'socket.io-client';
 import { ChatList } from '../../Components';
 import style from './style';
 import { setRoom, addRoom, setFetching } from '../../Redux/Actions/room';
 import { setLocation } from '../../Redux/Actions/config';
+import { baseUrl } from '../../Utils/config';
 
 const Chat = (props) => {
     const [validateRoom, setValidateRoom] = useState(false);
@@ -51,6 +53,8 @@ const Chat = (props) => {
         }
 
         AppState.addEventListener('change', state => {
+            const socket = io(baseUrl);
+            socket.disconnect();
             if (state === 'background') {
                 if (props.location && validateLocation) {
                     props.setLocation(props.auth.isLogin.id, null);
