@@ -1,7 +1,7 @@
 import { login, register } from './auth';
 import { getUserById, updateImageProfile, updateUser } from './user';
 import { getRoomByUser, addFriendRoom, updateRoom } from './room';
-import { getChatByRoom } from './chat';
+import { getChatByRoom, addChat } from './chat';
 
 export {
     login,
@@ -12,5 +12,6 @@ export {
     getRoomByUser,
     addFriendRoom,
     updateRoom,
-    getChatByRoom
+    getChatByRoom,
+    addChat
 }

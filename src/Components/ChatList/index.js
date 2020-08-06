@@ -11,14 +11,12 @@ const url = 'https://pbs.twimg.com/profile_images/378800000704816685/9dc1439d939
 
 const ChatList = (props) => {
     const navigation = useNavigation();
-    // const rooms = props.rooms;
     const [rooms, setRooms] = useState(props.rooms);
     const friends = props.room.friend;
     const userId = props.user.id;
 
     useEffect(() => {
         const socket = io(baseUrl);
-        console.log(rooms);
 
         socket.on('updateImage', res => {
             const dataFriends = friends;
@@ -45,30 +43,20 @@ const ChatList = (props) => {
                             ...room,
                             ...res
                         }
-                        console.log(room);
                         dataRooms.splice(index, 1);
-                        dataRooms.push(room);
+                        dataRooms.unshift(room);
                         props.updateRooms(dataRooms);
-                        setRooms(dataRooms);
                         socket.emit('yohohoho', room);
                     }
                 })
-                // const room = rooms.filter(room => room.id === res.id);
-                // if (room.length) {
-                //     const index = room[0].indexOf(rooms);
-                //     const dataRoom = room[0];
-                //     dataRooms.splice(index, 1);
-                //     dataRooms.push(dataRoom);
-                //     props.useRoom(dataRooms);
-                //     socket.emit('yohohoho', dataRooms);
-                // }
             }
         });
     }, [rooms, friends])
 
     return (
         <>
-            {rooms.length ? rooms.map((room, key) => {
+            {rooms.length ? 
+            rooms.map((room, key) => {
                 const messageStatus = room.user1 === userId ? room.status === 3 ? true : false : room.status === 2 ? true : false;
 
                 return (

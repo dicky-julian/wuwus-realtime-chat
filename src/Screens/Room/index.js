@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FlatList, Image, ImageBackground, Keyboard, Modal, Text, TextInput, TouchableOpacity, ScrollView, View } from 'react-native';
+import { Image, ImageBackground, Keyboard, Modal, Text, TextInput, TouchableOpacity, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Chat, Topbar } from '../../Components';
 
 import { baseUrl } from '../../Utils/config';
-import { getUserById, getChatByRoom } from '../../Utils/Api';
+import { getUserById, getChatByRoom, addChat } from '../../Utils/Api';
 import { setReadChat } from '../../Redux/Actions/room';
 
 import style from './style';
@@ -25,6 +25,7 @@ const Room = (props) => {
     const [chat, setChat] = useState(null);
     const [friend, setFriend] = useState();
     const [rooms, setRooms] = useState(props.route.params.room);
+    const [message, setMessage] = useState();
     const { id, id_friend } = rooms;
     const scrollViewRef = useRef();
 
@@ -42,15 +43,30 @@ const Room = (props) => {
         })
     }
 
-    const renderItem = ({ item }) => (
-        <Chat
-            self={props.user.id === item.id_user ? true : false}
-            status={true}
-            message={item.message}
-            date={item.created_at}
-            isStart={item.message ? false : true}
-        />
-    );
+    // const renderItem = ({ item }) => (
+    //     <Chat
+    //         self={props.user.id === item.id_user ? true : false}
+    //         status={true}
+    //         message={item.message}
+    //         date={item.created_at}
+    //         isStart={item.message ? false : true}
+    //     />
+    // );
+
+    const submitMessage = () => {
+        if (message) {
+            const data = {
+                id_room: id,
+                id_user: props.user.id,
+                type: 'text',
+                message: message
+            }
+            addChat(data).then(res => {
+                if (res) setMessage('');
+                Keyboard.dismiss();
+            })
+        }
+    }
 
     useEffect(() => {
         Keyboard.addListener('keyboardDidShow', (e) => keyboardWillShow(e));
@@ -71,17 +87,26 @@ const Room = (props) => {
     });
 
     useEffect(() => {
-        if (friend) {
-            const socket = io(baseUrl);
+        const socket = io(baseUrl);
 
-            socket.on('updateImage', res => {
+        if (friend) {
+            socket.on('updateStatus', res => {
                 setFriend({
                     ...friend,
                     location: res.location
                 })
             });
         }
-    }, [])
+
+        socket.on('addChat', res => {
+            if (chat && id == res.id_room) {
+                setChat([
+                    ...chat,
+                    res
+                ])
+            }
+        });
+    }, [chat, friend])
 
     useEffect(() => {
         const userId = props.user.id;
@@ -126,19 +151,6 @@ const Room = (props) => {
                                     ))}
                                 </View>
                             </ScrollView>
-                            // <ScrollView style={{ height: 500 }} ref={ref => {this.scrollView = ref}}
-                            // onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
-                            //     <View>
-                            //         <FlatList
-                            //             inverted
-                            //             style={style.container}
-                            //             data={chat}
-                            //             renderItem={renderItem}
-                            //             keyExtractor={(item) => item.id.toString()}
-                            //             contentContainerStyle={{ flex: 1 }}
-                            //         />
-                            //     </View>
-                            // </ScrollView>
                             :
                             <View style={style.container}>
                                 <Chat isStart={true} />
@@ -147,17 +159,18 @@ const Room = (props) => {
                         }
                         <View style={{ ...style.inputContainer, bottom: position }}>
                             <View style={style.modalInput}>
-                                <TextInput style={style.input} />
+                                <TextInput style={style.input} onChangeText={text => setMessage(text)} value={message} />
                                 <TouchableOpacity onPress={() => handlePickImage()}><Ionicons name="camera" size={23} color='#8a8a8a' /></TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={style.submitButton}>
+                            <TouchableOpacity style={style.submitButton} onPress={() => submitMessage()}>
                                 <Ionicons name="send" size={15} style={{ alignSelf: 'center' }} color={color.light} />
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <Modal animationType='fade' transparent={false} visible={modalVisible} onPress={() => setModalVisible(false)}>
-                        {image ?
+
+                    {image ?
+                        <Modal animationType='fade' transparent={false} visible={modalVisible} onPress={() => setModalVisible(false)}>
                             <View style={{ backgroundColor: color.dark }}>
                                 <ImageBackground
                                     source={{ uri: image.uri }}
@@ -171,10 +184,10 @@ const Room = (props) => {
                                     </TouchableOpacity>
                                 </ImageBackground>
                             </View>
-                            :
-                            <></>
-                        }
-                    </Modal>
+                        </Modal>
+                        :
+                        <></>
+                    }
                 </View>
                 :
                 <View style={style.loadingContainer}>

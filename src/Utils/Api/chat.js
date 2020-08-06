@@ -19,6 +19,26 @@ const getChatByRoom = async (id) => {
     return res;
 }
 
+const addChat = async (data) => {
+    const options = {
+        'method': 'post',
+        'url': `${path.fetchChat}`,
+        'data': data
+    };
+
+    const res = await fetch(options)
+        .then(res => {
+            return {
+                data: res.data.data
+            }
+        })
+        .catch((err) => {
+            return false
+        });
+    return res;
+}
+
 export {
-    getChatByRoom
+    getChatByRoom,
+    addChat
 }
