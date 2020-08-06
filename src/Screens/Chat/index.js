@@ -61,7 +61,7 @@ const Chat = (props) => {
                 }
             }
         });
-    }, [props.room])
+    })
 
     return (
         <>{rooms ?

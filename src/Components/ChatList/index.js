@@ -11,7 +11,8 @@ const url = 'https://pbs.twimg.com/profile_images/378800000704816685/9dc1439d939
 
 const ChatList = (props) => {
     const navigation = useNavigation();
-    const [rooms, setRooms] = useState(props.rooms);
+    const rooms = props.rooms;
+    // const [rooms, setRooms] = useState(props.rooms);
     const friends = props.room.friend;
     const userId = props.user.id;
 
@@ -44,9 +45,11 @@ const ChatList = (props) => {
                             ...res
                         }
                         dataRooms.splice(index, 1);
-                        dataRooms.unshift(room);
+                        // dataRooms.unshift(room);
+                        let sendingRooms = [room, ...dataRooms];
                         props.updateRooms(dataRooms);
-                        socket.emit('yohohoho', room);
+                        // setRooms(sendingRooms);
+                        socket.emit('yohohoho', sendingRooms);
                     }
                 })
             }
@@ -55,26 +58,26 @@ const ChatList = (props) => {
 
     return (
         <>
-            {rooms.length ? 
-            rooms.map((room, key) => {
-                const messageStatus = room.user1 === userId ? room.status === 3 ? true : false : room.status === 2 ? true : false;
+            {rooms.length ?
+                rooms.map((room, key) => {
+                    const messageStatus = room.user1 === userId ? room.status === 3 ? true : false : room.status === 2 ? true : false;
 
-                return (
-                    <TouchableOpacity style={style.chatContainer} onPress={() => navigation.navigate('Room', { room: room })} key={key}>
-                        <Image
-                            style={style.chatAvatar}
-                            source={{ uri: room.friendImage ? `${baseUrl}/images/${room.friendImage}` : url }}
-                        />
-                        <View style={style.chat}>
-                            <View style={style.chatView}>
-                                <Text style={style.username}>{room.friendName}</Text>
-                                <Text style={style.message}>{room.last_chat}</Text>
+                    return (
+                        <TouchableOpacity style={style.chatContainer} onPress={() => navigation.navigate('Room', { room: room })} key={key}>
+                            <Image
+                                style={style.chatAvatar}
+                                source={{ uri: room.friendImage ? `${baseUrl}/images/${room.friendImage}` : url }}
+                            />
+                            <View style={style.chat}>
+                                <View style={style.chatView}>
+                                    <Text style={style.username}>{room.friendName}</Text>
+                                    <Text style={style.message}>{room.last_chat}</Text>
+                                </View>
+                                {messageStatus ? <View style={style.indicator} /> : <></>}
                             </View>
-                            {messageStatus ? <View style={style.indicator} /> : <></>}
-                        </View>
-                    </TouchableOpacity>
-                )
-            }) : <></>
+                        </TouchableOpacity>
+                    )
+                }) : <></>
             }
         </>
     )

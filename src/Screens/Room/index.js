@@ -43,16 +43,6 @@ const Room = (props) => {
         })
     }
 
-    // const renderItem = ({ item }) => (
-    //     <Chat
-    //         self={props.user.id === item.id_user ? true : false}
-    //         status={true}
-    //         message={item.message}
-    //         date={item.created_at}
-    //         isStart={item.message ? false : true}
-    //     />
-    // );
-
     const submitMessage = () => {
         if (message) {
             const data = {
@@ -93,7 +83,7 @@ const Room = (props) => {
             socket.on('updateStatus', res => {
                 setFriend({
                     ...friend,
-                    location: res.location
+                    location: res.status
                 })
             });
         }

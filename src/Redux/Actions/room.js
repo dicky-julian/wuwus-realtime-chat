@@ -62,7 +62,7 @@ const addFriend = (id_user, code_user) => dispatch => {
 
 const updateRooms = (data) => dispatch => {
     dispatch(useRoom(data));
-    // dispatch(setFetching(true));
+    dispatch(setFetching(true));
 }
 
 const updateFriend = (data) => dispatch => {
