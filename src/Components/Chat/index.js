@@ -7,7 +7,7 @@ import { color } from '../../Assets/Styles';
 
 const Chat = (props) => {
     const date = moment(props.date).format('HH:mm A');
-    const chatShape = props.self ? { alignSelf: 'flex-start', borderTopLeftRadius: 0 } : { alignSelf: 'flex-end', borderTopRightRadius: 0 };
+    const chatShape = props.self ? { alignSelf: 'flex-end', borderTopLeftRadius: 0 } : { alignSelf: 'flex-start', borderTopRightRadius: 0 };
     const chatPadding = props.status ? { paddingTop: 5, paddingBottom: 5 } : { paddingTop: 20, paddingBottom: 5 };
     return (
         <>{props.isStart ?

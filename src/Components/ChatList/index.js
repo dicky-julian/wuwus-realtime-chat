@@ -47,7 +47,7 @@ const ChatList = (props) => {
                         dataRooms.splice(index, 1);
                         // dataRooms.unshift(room);
                         let sendingRooms = [room, ...dataRooms];
-                        props.updateRooms(dataRooms);
+                        props.updateRooms(sendingRooms);
                         // setRooms(sendingRooms);
                         socket.emit('yohohoho', sendingRooms);
                     }

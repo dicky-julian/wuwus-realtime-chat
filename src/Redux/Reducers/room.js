@@ -27,8 +27,8 @@ const room = (state = initialState, action) => {
         case 'SET_READ_CHAT':
             const room = state.room;
             const selectedRoom = room.filter(room => room.id == action.payload.id_room);
-            const index = selectedRoom.indexOf(room);
             const dataRoom = selectedRoom[0];
+            const index = room.findIndex(room => room.id === action.payload.id_room);
             dataRoom.status = action.payload.status;
             room.splice(index, 1);
             room.push(dataRoom);
